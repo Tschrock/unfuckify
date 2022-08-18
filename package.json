@@ -1,0 +1,35 @@
+{
+  "name": "unfuckify",
+  "version": "1.0.0",
+  "description": "A collection of utilities to help \"unfuck\" minified and webpack'd javascript.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tschrock/unfuckify.git"
+  },
+  "keywords": [
+    "webpack",
+    "minify",
+    "unminify",
+    "unwebpack"
+  ],
+  "author": "Tyler Schrock <tschrock123@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tschrock/unfuckify/issues"
+  },
+  "homepage": "https://github.com/tschrock/unfuckify#readme",
+  "dependencies": {
+    "eslint": "^8.22.0",
+    "typescript": "^4.7.4"
+  },
+  "devDependencies": {
+    "@types/eslint": "^8.4.5",
+    "@types/node": "^18.7.6",
+    "@typescript-eslint/eslint-plugin": "^5.33.1",
+    "@typescript-eslint/parser": "^5.33.1"
+  }
+}
