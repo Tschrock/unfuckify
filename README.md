@@ -116,6 +116,25 @@ Will be fixed to:
 ((32 << 5) >> 3) & (5 + 3 - 4)
 ```
 
+### no-variable-reuse
+Disallows reusing variables for other assignments.
+
+For example:
+```js
+let foo = 0
+log(foo)
+foo = 1
+log(foo)
+```
+
+Will be fixed to:
+```js
+let foo = 0
+log(foo)
+let foo_2 = 1
+log(foo_2)
+```
+
 ## ESLint Utilities
 TODO
 
@@ -124,25 +143,3 @@ TODO
 
 ## Typescript AST Utilities
 TODO
-
-## TODO
-
-### Fix variable reuse
-
-Fixes simple instances of variable reuse.
-
-From:
-```js
-let foo = 0
-bar(foo)
-foo = 1
-baz(foo)
-```
-
-To:
-```js
-let foo_1 = 0
-bar(foo_1)
-let foo_2 = 1
-baz(foo_2)
-```
