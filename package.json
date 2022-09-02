@@ -4,7 +4,7 @@
   "description": "A collection of utilities to help \"unfuck\" minified and webpack'd javascript.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test:cli": "mocha"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,8 @@
     "@types/eslint": "^8.4.5",
     "@types/node": "^18.7.6",
     "@typescript-eslint/eslint-plugin": "^5.33.1",
-    "@typescript-eslint/parser": "^5.33.1"
+    "@typescript-eslint/parser": "^5.33.1",
+    "mocha": "^10.0.0",
+    "ts-node": "^10.9.1"
   }
 }

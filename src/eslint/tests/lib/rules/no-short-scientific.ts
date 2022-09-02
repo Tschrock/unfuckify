@@ -1,7 +1,7 @@
 import { RuleTester } from 'eslint'
 import rule from '../../../lib/rules/no-short-scientific'
 
-const ruleTester = new RuleTester()
+const ruleTester = new RuleTester({ env: { es6: true } })
 ruleTester.run('no-short-scientific', rule, {
     valid: [
         { code: '1' },
@@ -17,6 +17,7 @@ ruleTester.run('no-short-scientific', rule, {
         {
             code: '1E3',
             errors: [{ messageId: 'scientific' }],
+            output: '1000',
         },
     ],
 })

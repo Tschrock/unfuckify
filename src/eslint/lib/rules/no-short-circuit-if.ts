@@ -1,5 +1,5 @@
 import type { Rule } from 'eslint'
-import { removePairs, getTokenBetween } from '../../eslint-utils'
+import { removePairs, getTokenBetween, removeSpacingBefore } from '../../eslint-utils'
 
 const rule: Rule.RuleModule = {
     meta: {
@@ -36,6 +36,7 @@ const rule: Rule.RuleModule = {
                                         fixer.insertTextBefore(left, 'if ('),
                                         fixer.insertTextAfter(left, ')'),
                                         fixer.replaceText(opToken, ''),
+                                        ...removeSpacingBefore(fixer, source, right),
                                     ]
                                 } else if (op === '||' || op === '??') {
                                     return [

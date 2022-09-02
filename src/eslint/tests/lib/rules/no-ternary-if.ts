@@ -1,7 +1,7 @@
 import { RuleTester } from 'eslint'
 import rule from '../../../lib/rules/no-ternary-if'
 
-const ruleTester = new RuleTester()
+const ruleTester = new RuleTester({ env: { es6: true } })
 ruleTester.run('no-ternary-if', rule, {
     valid: [
         {
@@ -15,6 +15,7 @@ ruleTester.run('no-ternary-if', rule, {
         {
             code: 'foo ? bar() : baz()',
             errors: [{ messageId: 'ternaryIf' }],
+            output: 'if (foo) { bar() } else { baz() }',
         },
     ],
 })
