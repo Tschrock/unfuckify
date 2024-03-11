@@ -14,7 +14,7 @@
         "brace-style": ["error"],
         "no-sequences": ["error"],
         "semi": ["error", "never"],
-        "@typescript-eslint/quotes": ["error", "single"],
+        "@typescript-eslint/quotes": ["error", "single", { "avoidEscape": true }],
         "@typescript-eslint/restrict-plus-operands": ["off"],
         "@typescript-eslint/prefer-readonly": ["error"]
     },
