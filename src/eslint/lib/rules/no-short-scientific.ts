@@ -25,7 +25,7 @@ const rule: Rule.RuleModule = {
         return {
             Literal(node) {
                 const { value, raw } = node
-                if (value && raw && Number.isInteger(value) && isScientific(raw) && value < maxInt) {
+                if (value && raw && typeof value === 'number' && Number.isInteger(value) && isScientific(raw) && value < maxInt) {
                     context.report({
                         node,
                         messageId: 'scientific',
