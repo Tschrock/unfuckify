@@ -52,6 +52,11 @@ export async function unpack(file: string, destPath: string): Promise<void> {
     // await fs.writeFile(astpath, debugAST(sourceFile, 10))
 }
 
+/**
+ * Reads a webpack chunk and seperates it into modules.
+ * @param source The source code of the webpack chunk.
+ * @returns The chunk data.
+ */
 export function readChunkData(source: string): ChunkData {
     const sourceFile = ts.createSourceFile('index.ts', source, ts.ScriptTarget.ESNext, false)
     const statements = sourceFile.statements
