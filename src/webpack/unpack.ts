@@ -44,7 +44,7 @@ export async function unpack(file: string, destPath: string): Promise<void> {
     for (const [key, value] of chunkData.modules) {
         const modulePath = path.join(nodesFolder, `${key}.js`)
         const { args, source } = value
-        await fs.writeFile(modulePath, opinionatedFormat(rewriteModule(args, `// ${args.join(' ')}\n let ${args.join(', ')};\n${source}`)))
+        await fs.writeFile(modulePath, await opinionatedFormat(rewriteModule(args, `// ${args.join(' ')}\n let ${args.join(', ')};\n${source}`)))
     }
 
     // fs.writeFile(astpath, printer.printNode(ts.EmitHint.Unspecified, sourceFile, sourceFile))

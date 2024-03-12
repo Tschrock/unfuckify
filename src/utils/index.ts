@@ -42,7 +42,7 @@ const ESLINT_CONFIG_DEFAULT = {
  * @param options Prettier options.
  * @returns The formatted string.
  */
-export function formatPrettier(source: string, options?: prettier.Options | undefined): string {
+export function formatPrettier(source: string, options?: prettier.Options | undefined): Promise<string> {
     return prettier.format(source, { ...DEFAULT_PRETTIER, ...options })
 }
 
@@ -119,14 +119,14 @@ function ensureCustomRules(linter: Linter) {
 /**
  * Applies multiple passes of an opinionated set of formatting options designed to make reverse engeneering easier.
  */
-export function opinionatedFormat(source: string, options?: FormatOptions | undefined): string {
+export async function opinionatedFormat(source: string, options?: FormatOptions | undefined): Promise<string> {
     const realConfig = {...DefaultFormatOptions, ...options}
     const eslintConfig = ensureEslintConfig(realConfig.eslint)
     ensureCustomRules(eslintConfig.linter)
     const prettierConfig = realConfig.prettier
 
     // First formatting pass
-    source = formatPrettier(source, prettierConfig)
+    source = await formatPrettier(source, prettierConfig)
 
     // Cleanup and de-minification
     source = formatEslintRulesets(source, [
@@ -155,7 +155,7 @@ export function opinionatedFormat(source: string, options?: FormatOptions | unde
     ], eslintConfig)
 
     // Second formatting pass
-    source = formatPrettier(source, prettierConfig)
+    source = await formatPrettier(source, prettierConfig)
 
     // Second dleanup and de-minification
     source = formatEslint(source, {
