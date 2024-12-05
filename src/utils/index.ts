@@ -1,3 +1,5 @@
+import fs from 'node:fs/promises'
+
 import prettier from 'prettier'
 import { Linter } from 'eslint'
 
@@ -27,14 +29,51 @@ interface EslintConfig extends Linter.Config {
 const DEFAULT_LINTER = new Linter()
 DEFAULT_LINTER.defineRules(customRules)
 
-const ESLINT_CONFIG_DEFAULT = {
+const ESLINT_CONFIG_DEFAULT: Linter.Config & { linter: Linter } = {
     linter: DEFAULT_LINTER,
     root: true,
     env: {
         browser: true,
         es6: true,
     },
+    parserOptions: {
+        ecmaVersion: 'latest',
+    },
 }
+
+function isPlainObject(obj: unknown): obj is object {
+    return typeof obj === 'object'
+        && obj !== null
+        && Object.getPrototypeOf(obj) === Object.getPrototypeOf({})
+        && Object.values(Object.getOwnPropertyDescriptors(obj)).every(d => 'value' in d && d.writable && d.enumerable && d.configurable)
+}
+
+function mergePlainConfig<T extends object, U extends object>(base: T, override?: U | undefined): T & U {
+    if (!override) return base as T & U
+    const configEntries = []
+    const keys = new Set([...Object.keys(base), ...Object.keys(override)])
+    for (const key of keys) {
+        const baseValue = (base as Record<string, unknown>)[key]
+        const overrideValue = (override as Record<string, unknown>)[key]
+        if (isPlainObject(baseValue) && isPlainObject(overrideValue)) {
+            configEntries.push([key, mergePlainConfig(baseValue, overrideValue)])
+        } else {
+            configEntries.push([key, overrideValue ?? baseValue])
+        }
+    }
+    return Object.fromEntries(configEntries) as T & U
+}
+
+function getConfigLinter(config: EslintConfig): Linter {
+    if (config.linter) {
+        return config.linter
+    }
+    if (config.factory) {
+        return config.factory()
+    }
+    return DEFAULT_LINTER
+}
+
 
 /**
  * Runs prettier over the string.
@@ -54,8 +93,20 @@ export function formatPrettier(source: string, options?: prettier.Options | unde
  * @returns The formatted source string.
  */
 export function formatEslint(source: string, rules: Partial<Linter.RulesRecord>, config?: EslintConfig | undefined): string {
-    const { linter, factory, ...eslintConfig } = { ...ESLINT_CONFIG_DEFAULT, ...config, rules }
-    return (factory ? factory() : linter).verifyAndFix(source, eslintConfig).output
+    const fullConfig = mergePlainConfig(ESLINT_CONFIG_DEFAULT, config)
+    const eslintConfig = { ...fullConfig, rules }
+    const linter = getConfigLinter(fullConfig)
+    const report = linter.verifyAndFix(source, eslintConfig)
+    if (report.messages.some(m => m.fatal)) {
+        throw new EsLintFatalError('Fatal error during eslint fix', report)
+    }
+    return report.output
+}
+
+export class EsLintFatalError extends Error {
+    constructor(message: string, public readonly report: Linter.FixReport) {
+        super(message)
+    }
 }
 
 /**
@@ -116,11 +167,17 @@ function ensureCustomRules(linter: Linter) {
     }
 }
 
+export async function opinionatedFormatFile(infile: string, outfile: string, options?: FormatOptions | undefined): Promise<void> {
+    const source = await fs.readFile(infile, 'utf-8')
+    const formatted = await opinionatedFormat(source, options)
+    await fs.writeFile(outfile, formatted)
+}
+
 /**
  * Applies multiple passes of an opinionated set of formatting options designed to make reverse engeneering easier.
  */
 export async function opinionatedFormat(source: string, options?: FormatOptions | undefined): Promise<string> {
-    const realConfig = {...DefaultFormatOptions, ...options}
+    const realConfig = { ...DefaultFormatOptions, ...options }
     const eslintConfig = ensureEslintConfig(realConfig.eslint)
     ensureCustomRules(eslintConfig.linter)
     const prettierConfig = realConfig.prettier
@@ -138,16 +195,16 @@ export async function opinionatedFormat(source: string, options?: FormatOptions 
             'prefer-const': ['warn'],
 
             // General Cleanup
-            'custom/no-short-scientific': ['warn'],
+            'unfuckify/no-short-scientific': ['warn'],
             'no-floating-decimal': ['warn'],
             'no-implicit-coercion': ['warn'],
             'yoda': ['warn', 'never'],
         },
         // De-minify conditionals and sequences
         {
-            'custom/no-short-circuit-as-if': ['warn'],
-            'custom/no-ternary-as-if': ['warn'],
-            'custom/no-unused-sequence': ['warn'],
+            'unfuckify/no-short-circuit-as-if': ['warn'],
+            'unfuckify/no-ternary-as-if': ['warn'],
+            'unfuckify/no-unused-sequence': ['warn'],
             'curly': ['warn'],
             'no-lonely-if': ['warn'],
             'no-unneeded-ternary': ['warn'],
@@ -168,7 +225,7 @@ export async function opinionatedFormat(source: string, options?: FormatOptions 
             },
         }],
         'no-multi-spaces': ['warn'],
-        'custom/operator-parens': ['warn'],
+        'unfuckify/operator-parens': ['warn'],
     }, eslintConfig)
 
     return source

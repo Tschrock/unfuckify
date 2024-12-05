@@ -1,40 +1,42 @@
 {
-  "name": "unfuckify",
-  "version": "1.0.0",
-  "description": "A collection of utilities to help \"unfuck\" minified and webpack'd javascript.",
-  "main": "index.js",
-  "scripts": {
-    "test:cli": "mocha"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tschrock/unfuckify.git"
-  },
-  "keywords": [
-    "webpack",
-    "minify",
-    "unminify",
-    "unwebpack"
-  ],
-  "author": "Tyler Schrock <tschrock123@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/tschrock/unfuckify/issues"
-  },
-  "homepage": "https://github.com/tschrock/unfuckify#readme",
-  "dependencies": {
-    "eslint": "^8.57.0",
-    "prettier": "^3.2.5",
-    "ts-morph": "^22.0.0",
-    "typescript": "^5.4.2"
-  },
-  "devDependencies": {
-    "@types/eslint": "^8.56.5",
-    "@types/node": "^20.11.26",
-    "@types/prettier": "^3.0.0",
-    "@typescript-eslint/eslint-plugin": "^7.2.0",
-    "@typescript-eslint/parser": "^7.2.0",
-    "mocha": "^10.3.0",
-    "ts-node": "^10.9.2"
-  }
+    "name": "unfuckify",
+    "version": "1.0.0",
+    "description": "A collection of utilities to help \"unfuck\" minified and webpack'd javascript.",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "test:cli": "mocha",
+        "build": "tsc"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/tschrock/unfuckify.git"
+    },
+    "keywords": [
+        "webpack",
+        "minify",
+        "unminify",
+        "unwebpack"
+    ],
+    "author": "Tyler Schrock <tschrock123@gmail.com>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/tschrock/unfuckify/issues"
+    },
+    "homepage": "https://github.com/tschrock/unfuckify#readme",
+    "dependencies": {
+        "eslint": "^8.57.0",
+        "prettier": "^3.2.5",
+        "ts-morph": "^22.0.0",
+        "typescript": "^5.4.2"
+    },
+    "devDependencies": {
+        "@types/eslint": "^8.56.5",
+        "@types/node": "^20.11.26",
+        "@types/prettier": "^3.0.0",
+        "@typescript-eslint/eslint-plugin": "^7.2.0",
+        "@typescript-eslint/parser": "^7.2.0",
+        "mocha": "^10.3.0",
+        "ts-node": "^10.9.2"
+    }
 }
