@@ -31,12 +31,7 @@ DEFAULT_LINTER.defineRules(customRules)
 
 const ESLINT_CONFIG_DEFAULT: Linter.Config & { linter: Linter } = {
     linter: DEFAULT_LINTER,
-    root: true,
-    env: {
-        browser: true,
-        es6: true,
-    },
-    parserOptions: {
+    languageOptions: {
         ecmaVersion: 'latest',
     },
 }

@@ -1,7 +1,7 @@
 import { RuleTester } from 'eslint'
 import rule from '../../../lib/rules/no-variable-reuse'
 
-const ruleTester = new RuleTester({ env: { es6: true } })
+const ruleTester = new RuleTester({ languageOptions: { ecmaVersion: 'latest' } })
 ruleTester.run('no-variable-reuse', rule, {
     valid: [
         {
